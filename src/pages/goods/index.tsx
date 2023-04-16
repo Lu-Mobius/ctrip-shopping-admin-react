@@ -209,7 +209,7 @@ export default function Home() {
 
   // Just show the latest item.
   const displayRender = (labels: string[]) => labels[labels.length - 1];
-
+  console.log(data)
   return (
     <div style={{ padding: 30 }}>
       {/* 顶部搜索栏 */}
@@ -377,6 +377,8 @@ export default function Home() {
 
 
                     <div className={styles.comment_number}>{item.comments_number}条评论</div>
+
+
                   </div>
                   <div className={styles.rate_number}>{item.rating}</div>
                 </div>

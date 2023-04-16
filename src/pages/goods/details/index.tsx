@@ -1,9 +1,8 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-
 import { useRouter } from 'next/router'
+import { Col, Row } from 'antd';
+import styles from './index.module.css';
+
+
 
 
 // 利用useRouter()获取
@@ -16,8 +15,17 @@ const Post = () => {
 
 export default function Home() {
   return (
+    <>
+      <Row class>
 
+      </Row>
+      <Row>
 
-    Post()
+      </Row>
+      <Row>
+
+      </Row>
+
+    </>
   )
 }
