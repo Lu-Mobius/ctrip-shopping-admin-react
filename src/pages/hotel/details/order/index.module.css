@@ -1,0 +1,264 @@
+.body {
+    width: 97%;
+    height: calc(100vh - 180px);
+    overflow-y: scroll;
+    min-width: 500px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: row;
+    margin: 10px 30px;
+}
+
+.order_left {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 30px;
+}
+
+
+
+.titlebox {
+    border-bottom: 3px solid #000;
+}
+
+.hotel_name_box {
+    display: flex;
+    flex-direction: row;
+}
+
+.hotel_name {
+    color: #0f294d;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-right: 13px;
+    line-height: 1.4;
+}
+
+.location {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    margin-right: 13px;
+    line-height: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.location>div {
+    padding-top: 10px;
+    align-items: end;
+}
+
+.roomname {
+    color: #0f294d;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.additional_information {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.additional_information div {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 10px 10px 0;
+    color: #0f294d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.RangePicker_title {
+    width: 100%;
+    font-size: 20px;
+    line-height: 26px;
+    padding: 16px 0;
+    color: #0f294d;
+    font-weight: 700;
+}
+
+.form p {
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0 10%;
+    line-height: 30px;
+}
+
+.datebox {
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #dadfe6;
+}
+
+.residentsbox {
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #dadfe6;
+}
+
+.residents_name_box {
+    width: 60%;
+}
+
+.residentsbox span {
+    padding-left: 0;
+}
+
+.resident_title {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 700;
+    color: #0f294d;
+    margin: 10px 0;
+
+}
+
+.residents_input_text {
+    font-size: 20px;
+    padding: 0;
+    font-weight: 600;
+    border-bottom: 1px solid #dadfe6;
+    border-radius: 0%;
+    background-color: #fff;
+}
+
+
+.residents_input_text .form {
+    height: 300px;
+}
+
+.arrival_time {
+    height: 300px;
+}
+
+.timeselect {
+    width: 150px;
+}
+
+.receipt {
+    height: 300px;
+}
+
+
+.box {
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #dadfe6;
+}
+
+.paymentbox {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px dashed #dadfe6;
+    align-items: center;
+    justify-content: space-between
+}
+
+.paymentbox_left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.payment_text {
+    text-align: center;
+}
+
+
+.payment_money {
+    color: #287dfa;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 30px 10px;
+    position: relative;
+    top: -3px
+}
+
+.paybottom {
+    background-color: #ff9500;
+    padding: 16px 24px;
+    height: auto;
+    line-height: 1.3;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-radius: 2px;
+    cursor: pointer;
+    color: #fff;
+    margin-right: 20px;
+}
+
+.backbottom {
+    text-align: left;
+    border-radius: 0;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.order_right {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    width: 40%;
+    min-width: 420px;
+    height: 500px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 30px 60px;
+    box-shadow: 0 0px 5px rgb(23, 32, 90);
+    border: 1px solid #2639b4;
+    flex-shrink: 0;
+
+}
+
+
+
+.order_right_price {
+    border-bottom: 1px dashed #dadfe6;
+}
+
+.pricecount {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.pricecount_bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pricecount_text {
+    font-size: 24px;
+    display: flex;
+    color: #0f294d;
+    line-height: 30px;
+    font-weight: 700;
+}
+
+.order_right_cancellation {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    border-bottom: 1px dashed #dadfe6;
+}
+
+.order_right_cancellation_title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.order_right_cancellation_text {
+    margin-bottom: 15px;
+}

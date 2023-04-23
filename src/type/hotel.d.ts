@@ -9,3 +9,18 @@ export interface SearchOptionType {
     label: string;
     children?: SearchOptionType[];
 }
+
+export interface HotelDetailQueryType {
+    id: string | string[] | undefined;
+}
+
+export interface HotelDataType {
+    id: string | number;
+    hotel_name: string;
+}
+
+export interface PayQueryType {
+    userId: string | string[] | undefined;
+    orderId: string | string[] | undefined;
+
+}

@@ -1,0 +1,14 @@
+.content {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.bottom {
+    border-left: solid 1px #dadfe6;
+    border-right: solid 1px #dadfe6;
+    margin: 4px;
+}

@@ -1,0 +1,168 @@
+.list {
+    padding-left: 100px;
+    padding-right: 200px;
+}
+
+
+.leftbox {
+    width: 600px;
+    min-width: 500px;
+    flex-grow: 3;
+    display: flex;
+}
+
+.leftimage {
+    min-width: 300px;
+    max-width: 300px;
+    margin-right: 20px;
+}
+
+.titlebox {
+    flex-grow: 1;
+    padding-right: 50px;
+    border-right: 1px solid #666;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.title {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    word-wrap: break-word;
+    color: #0f294d;
+    line-height: 24px;
+    text-align: left;
+
+}
+
+.abc {
+    width: 100%;
+    margin-bottom: auto;
+    display: inline;
+    height: 50px;
+}
+
+.starbox {
+    height: 30px;
+    display: flex;
+    padding-right: 5px;
+
+}
+
+.staricon {
+    width: 30px;
+}
+
+.cooperationbox {
+    display: inline-block;
+}
+
+.cooperationicon1 {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    background-image: url(/cooperation_icon1.png)
+}
+
+.cooperationicon2 {
+
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    background-image: url(/cooperation_icon2.png)
+}
+
+
+.rightbox {
+    margin-top: -25px;
+    width: 400px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column
+}
+
+.scorebox {
+    width: 100%;
+    height: 100px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.comment_box {
+    text-align: right;
+}
+
+.rating_level {
+    font-size: 14px;
+    color: #4978ce;
+    line-height: 18px;
+    font-weight: 600;
+}
+
+.comment_number {
+    margin-top: 5px;
+    height: 30px;
+    color: #8592a6;
+    line-height: 18px;
+    font-size: 12px;
+}
+
+.rate_number {
+    width: 40px;
+    height: 36px;
+    border-radius: 2px;
+    background: #4978ce;
+    padding: 4px;
+    margin-left: 10px;
+    margin-top: 2px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 20px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.pricebox {
+    width: 100%;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.price {
+    height: 48px;
+    line-height: 48px;
+    font-weight: 600;
+    font-size: 24px;
+    color: #287dfa;
+    text-align: right;
+    cursor: pointer;
+}
+
+.pricetext {
+    padding-left: 5px;
+    height: 48px;
+    line-height: 54px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #0f294d;
+    margin-left: 1px;
+}
+
+.button {
+    margin-left: auto;
+    background: #287dfa;
+    border-radius: 2px;
+    font-size: 16px;
+    color: #fff;
+    text-align: auto;
+    line-height: 22px;
+    padding: 8px 16px;
+    width: 100px;
+    height: 40px;
+}
