@@ -65,14 +65,14 @@ export default function Home() {
 
         console.log('Received values of form: ', values);
         try {
-            const response = await request.post("/api/register", values);
+            const response = await request.post("/api/users", values);
             if (response.success) {
                 message.success('创建用户成功！')
                 const res = await request.get('/api/users');
                 setData(res.data);
                 setClear((prevClear) => !prevClear);//每次创建用户将setClear取反，表单清空
                 setOpen(false);
-            } if (response.exist) {
+            } else if (response.exist) {
                 message.error('用户已存在，不允许重复创建！')
             } else
                 message.error('创建用户失败，请重试')
@@ -87,16 +87,16 @@ export default function Home() {
     const columns: ColumnsType<UserListDataType> = [
         {
             title: '用户ID',
-            dataIndex: 'userId',
-            key: 'userId',
+            dataIndex: '_id',
+            key: '_id',
             render: (text) => <a>{text}</a>,
         },
         {
             title: '用户名',
-            dataIndex: 'userName',
-            key: 'userName',
+            dataIndex: 'name',
+            key: 'name',
             onFilter: (value, record) =>
-                record.userName.includes(value as string) || record.email.includes(value as string),
+                record.name.includes(value as string) || record.email.includes(value as string),
             filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
                 <div style={{ padding: 20 }}>
                     <div >
@@ -167,8 +167,8 @@ export default function Home() {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button danger type="default" onClick={() => handleDelete(record.userId)}>删除</Button>
-                </Space>
+                    <Button danger type="default" onClick={() => handleDelete(record._id)}>删除</Button>
+                </Space >
             ),
         },
     ];

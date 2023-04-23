@@ -24,3 +24,14 @@ export interface PayQueryType {
     orderId: string | string[] | undefined;
 
 }
+
+export interface HotelComment {
+    _id: string;
+    hotelId: string;
+    userId: string;
+    userName: string;
+    comment: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}

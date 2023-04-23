@@ -2,7 +2,9 @@
     height: calc(100vh - 180px);
     overflow-y: scroll;
     min-width: 500px;
-    overflow-x: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    padding: 20px;
 
 }
 
@@ -101,12 +103,15 @@
     text-align: left;
     letter-spacing: 0;
     color: #455873;
+    margin-top: 4px;
     margin-right: 4px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    max-height: 40px;
+
 }
 
 .pricelink {
@@ -164,7 +169,6 @@
 
 .display_page_bottom {
     display: block;
-    max-height: 400px;
     display: flex;
     flex-direction: row;
 
@@ -181,12 +185,13 @@
 .imageobx {
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .show_image {
     display: inline;
     width: 60%;
-    padding-right: 10px;
+    padding-right: 5px;
 }
 
 .show_image div {
@@ -198,6 +203,7 @@
     min-width: 100%;
     min-height: 100%;
     object-fit: cover;
+
 }
 
 .image_preview {
@@ -207,14 +213,17 @@
     flex-wrap: wrap;
     align-content: space-between;
     justify-content: space-between;
-    padding: 0;
     margin: 0;
 }
 
 
 .other_image {
-    width: calc(50% - 10px);
-    margin-right: 10px;
+    width: calc(50% - 5px);
+    margin-right: 5px;
+}
+
+.other_image:nth-child(-n+4) {
+    padding-bottom: 4px;
 }
 
 .other_image img {
@@ -241,7 +250,6 @@
     top: 30%;
     text-align: left;
     width: 100%;
-    min-height: 40%;
     margin-top: 30px;
 }
 
@@ -290,14 +298,14 @@
 .mapbox {
     display: block;
     width: 100%;
-    min-height: 40%;
+    height: 40%;
     height: 100px;
 }
 
 .facilitybox {
     display: block;
     width: 100%;
-    min-height: 40%
+    height: 40%
 }
 
 .nav {
@@ -452,14 +460,78 @@
 }
 
 
-.comment {
-    background: #999;
-    height: 600px;
-    border-bottom: 10px solid #fff
+.remark {
+    width: 100%;
+    border-top: 10px solid #eee;
 }
 
 .policy {
     background: #bbb;
     height: 1000px;
     border-bottom: 10px solid #fff
+}
+
+.remarkbox {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.remark_head {
+    padding-top: 30px;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.remark_head_left {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #0f294d;
+    line-height: 24px;
+    font-weight: bold;
+}
+
+.remark_head_right {
+    color: #999;
+    font-size: 18px;
+    margin-left: 8px;
+    line-height: 35px;
+    font-weight: bold;
+}
+
+.remarkbox_left {
+    min-width: 112px;
+    width: 26.5%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 50px;
+    border-right: 2px solid #dadfe6;
+}
+
+.remarkbox_left_namebox {
+    display: flex;
+    flex-direction: row;
+}
+
+.remarkbox_left_name {
+    padding-top: 5px;
+    font-size: 16px;
+    word-break: break-all;
+}
+
+.remarkbox_left_name {
+    color: #666;
+    font-size: 18px;
+    margin-left: 20px;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.remarkbox_time {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
 }

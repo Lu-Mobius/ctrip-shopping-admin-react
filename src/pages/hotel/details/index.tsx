@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Anchor, Breadcrumb, Button, Col, Dropdown, List, Modal, Popover, Row, Select } from 'antd';
+import { Anchor, Avatar, Breadcrumb, Button, Col, Divider, Dropdown, List, Modal, Popover, Row, Select, Space, message } from 'antd';
 import styles from './index.module.css';
 import { useRef } from 'react';
-import { HotelDataType, HotelDetailQueryType } from '@/type/hotel';
+import { HotelComment, HotelDataType, HotelDetailQueryType } from '@/type/hotel';
 import { getHotelDetail } from '@/api/hotel';
 import Link from 'next/link';
 import 'remixicon/fonts/remixicon.css';
@@ -13,6 +13,9 @@ import dayjs from 'dayjs';
 import RoomSelector from '@/components/RoomSelector';
 import StarBox from '@/components/Starbox';
 import request from '@/utils/request';
+import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import { UserType } from '@/type/user';
+import { useCurrentUser } from '@/utils/useCurrentUser';
 
 export default function Home() {
 
@@ -24,14 +27,16 @@ export default function Home() {
     setTargetOffset(topRef.current?.offsetHeight);
   }, []);
 
+  const currentUser = useCurrentUser();
   const [data, setData] = useState<any>([])
+  const [CommentArry, setCommentArr] = useState<any>([])
 
   // 处理日期选择表单的hook
   const [selectedDateRange, setSelectedDateRange] = useState<any[]>([]);
   const [dateRangeDiff, setDateRangeDiff] = useState<number>(0); // 存储时间差
   const [roomCount, setRoomCount] = useState(1);
   const [guestCount, setGuestCount] = useState(1);
-  console.log("🚀 ~ file: index.tsx:58 ~ handleBookButtonClick ~ data:", data)
+
   const handleBookButtonClick = (stock: any, packageOptionsIndex: any, price: any, room_name: any) => {
     const hasSelectedDate = selectedDateRange.some(date => !!date);
 
@@ -161,33 +166,42 @@ export default function Home() {
     setDateRangeDiff(diff);
   };
 
+  async function fetchData() {
 
+    const { id } = router.query
+
+    if (id !== undefined) {
+      const res = await request.get(`/api/hotel/details?_id=${id}`,
+      )
+      // const res: any = await getHotelDetail(hotel_id)
+      setData(res.hoteldetail)
+      setCommentArr(res.comArry)
+    }
+  }
 
   const router = useRouter()
 
   useEffect(() => {
-    async function fetchData() {
 
-      const { id } = router.query
-
-      if (id !== undefined) {
-        const res = await request.get(`/api/hotel/details?_id=${id}`,
-        )
-        // const res: any = await getHotelDetail(hotel_id)
-        setData(res)
-      }
-    }
     fetchData()
   }, [router.query])
 
-
+  const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+  );
 
   // 设置点击anchor事件，阻止路由跳转（anchor底层用a标签实现跳转）
   const handleClick = (
     e: React.MouseEvent<HTMLElement>,
   ) => {
     e.preventDefault();
+    const targetElement = document.getElementById('part-1');
+    targetElement?.scrollIntoView({ behavior: 'smooth' });
   };
+
   if (data === undefined) {
     return <div>Loading...</div>;
   }
@@ -244,7 +258,7 @@ export default function Home() {
             {/* 查看详情按钮 */}
 
             {/* <Link href={{ pathname: '/hotel/details?id='}} data-id={item.id}> */}
-            <Button type="primary" className={styles.button} href='#part-1' >选择房间</Button>
+            <Button type="primary" className={styles.button} href='#part-1' onClick={handleClick}>选择房间</Button>
             {/* </Link> */}
 
           </div>
@@ -397,8 +411,67 @@ export default function Home() {
           )}
         />
       </Row>
-      <Row id='part-2' className={styles.comment}>
-        2
+
+      <Row id='part-2' className={styles.remark}>
+
+        <div className={styles.remark_head} >
+          <div className={styles.remark_head_left}>点评</div>
+          <div className={styles.remark_head_right}>{`(${CommentArry.length}条真实住客点评)`}</div>
+        </div>
+
+        <List
+          style={{ width: '100%', padding: 20 }}
+          pagination={{
+            onChange: (page) => {
+              console.log(page);
+            },
+            pageSize: 5, position: 'bottom', align: 'end'
+          }}
+          dataSource={CommentArry}
+          renderItem={(item: HotelComment, index) => (
+            <List.Item
+              key={item._id}
+              actions={[
+                <div style={{ paddingRight: 50 }}>{currentUser?.name === 'admin' || currentUser?._id === item.userId ? <Button danger onClick={async () => {
+                  try {
+                    const res = await request.delete(`/api/comment?userId=${item.userId}&_id=${item._id}`, {
+                    });
+                    if (res.success == true) {
+                      message.success('评论删除成功')
+                      fetchData()
+                    } else {
+                      message.error('评论删除失败')
+                    }
+                  } catch (error) {
+                    console.error(error);
+                    message.error('评论删除失败')
+                  };
+                }}>删除</Button> : null}</div>
+
+              ]}
+            >
+              <div className={styles.remarkbox}>
+                <div className={styles.remarkbox_left}>
+                  <div className={styles.remarkbox_left_namebox}>
+                    <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />
+                    <div className={styles.remarkbox_left_name}>{item.userName}</div>
+                  </div>
+                  <div className={styles.remarkbox_time}>
+                    <div>发表于：</div>
+                    <div>{new Date(item.createdAt).toLocaleString()}</div>
+                  </div>
+
+                </div>
+                <div className={styles.remarkbox_right}>{item.comment}</div>
+              </div>
+
+            </List.Item>
+          )}
+        />
+
+
+
+
       </Row>
       <Row id='part-3' className={styles.policy}>
         3

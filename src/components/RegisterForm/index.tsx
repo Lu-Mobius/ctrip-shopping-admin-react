@@ -152,11 +152,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onFinish, clear }) 
 
             <Form.Item
                 style={{ marginBottom: '30px' }}
-                labelCol={{ span: 1 }}
+                labelCol={{ span: 2 }}
                 wrapperCol={{ span: 8 }}
             >
 
-                <Button type="primary" htmlType="submit" style={{ left: '212%', width: '100px', height: '40px' }}>
+                <Button type="primary" htmlType="submit" style={{ left: '172%', width: '120px', height: '40px' }}>
                     创建用户
                 </Button>
             </Form.Item>

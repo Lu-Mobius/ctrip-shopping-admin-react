@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from 'antd';
 import styles from "./index.module.css";
 import { SegmentedValue } from "antd/es/segmented";
+import CommentForm from "@/components/CommentForm";
 
 export default function Home() {
 
@@ -87,13 +88,26 @@ export default function Home() {
         }
     };
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const handleShowModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCancelModal = () => {
+        setIsModalOpen(false);
+    };
     const handleStatusChange = (value?: SegmentedValue) => {
         if (typeof value === "number") {
             setStatus(value);
         } else if (typeof value === "string") {
             setStatus(Number(value));
         }
+    };
+    const onFinish = (values: any) => {
+        console.log('Received values of form: ', values);
+        // 在这里提交评论表单，处理表单数据等等
+        handleCancelModal();
     };
 
     async function handlePayClickInindent(orderId: string) {
@@ -233,6 +247,11 @@ export default function Home() {
                                                         console.error(error);
                                                     };
                                                 }}>取消订单</Button>
+                                                <Button type="primary" className={styles.comment_button} style={{ display: item.status == '3' ? 'inline-block' : 'none', marginLeft: 20, marginRight: 8, color: 'white' }} onClick={async () => {
+                                                    setIsModalOpen(true)
+                                                }} >
+                                                    <CommentForm open={isModalOpen} onCancel={handleCancelModal} item={item} />
+                                                    去评论</Button>
                                             </Space>
                                         </div>
                                     </div>

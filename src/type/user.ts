@@ -41,8 +41,8 @@ export interface RegistrationFormValues {
 }
 
 export interface UserListDataType {
-    userId: string;
-    userName: string;
+    _id: string;
+    name: string;
     email: string;
     phoneNumber: number;
     role: string;

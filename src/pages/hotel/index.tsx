@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Cascader, Col, Form, Input, Row, Select, Space, Avatar, List, message, Image, Popover } from 'antd';
+import { Button, Cascader, Col, Form, Input, Row, Select, Space, Avatar, List, message, Image, Popover, Empty } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { getOverflowOptions } from 'antd/es/_util/placements';
@@ -18,6 +18,11 @@ import qs from 'qs';
 export default function Home() {
   //useState hook更新data状态
   const [data, setData] = useState([])
+  const [total, setTotal] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [queryurl,setqueryurl]= useState('')
+  const [ifSearch,setIfSearch]= useState(false)
+  console.log("🚀 ~ file: index.tsx:22 ~ currentPage:", currentPage)
 
   // 获取表单实例，设置初始化的点击事件
   const [form] = Form.useForm()
@@ -30,19 +35,28 @@ export default function Home() {
   // 空数组表示页面dom加载完毕时触发,获取hotel列表
   useEffect(() => {
     async function fetchData() {
-      const res = await request.get('/api/hotel/list')
-      console.log("🚀 ~ file: index.tsx:34 ~ fetchData ~ res:", res)
+      const res = await request.get(`/api/hotel/list?page=${currentPage}`)
       setData(res.data)
+      setTotal(res.total)
     }
     fetchData()
   }, [])
 
+  
   const handleSearchFinish = async (values: HotelQueryType) => {
     try {
-      const queryString = qs.stringify(values);
-      const res = await request.get(`/api/hotel/list?name=${name}&area=${area == undefined ? area[1] : ''}&star=${star == undefined ? star : ''}`);
+      setqueryurl(`&hotel_name=${name}&area=${area[1] !==undefined  ? area[1] : ''}&star_number=${star !==undefined ? star : ''}`)
+      setCurrentPage(1)
+      setIfSearch(true)
+      console.log("🚀 ~ file: index.tsx:49 ~ handleSearchFinish ~ setqueryurl:", setqueryurl)
+      const res = await request.get(`/api/hotel/list?hotel_name=${name}&area=${area[1] !==undefined  ? area[1] : ''}&star_number=${star !==undefined ? star : ''}`);
       setData(res.data);
-      console.log("🚀 ~ file: index.tsx:48 ~ handleSearchFinish ~ res:", res)
+      
+      setTotal(res.total)
+      const scrollbox=document.querySelector('#scrollbox>div>div>div>div>div') as Element
+      console.log("🚀 ~ file: index.tsx:56 ~ handleSearchFinish ~ scrollbox:", scrollbox)
+      scrollbox.scrollTo(0,0)
+      console.log("🚀 ~ file: index.tsx:58 ~ handleSearchFinish ~ scrollbox:", scrollbox)
     } catch (error) {
       console.error(error);
     }
@@ -50,11 +64,24 @@ export default function Home() {
 
   // 滚动条高度与滚动事件
   const ContainerHeight = 700
-  const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
+  const onScroll =  async (e: React.UIEvent<HTMLElement, UIEvent>) => {
+    setIfSearch(false)
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
-      appendData();
+      if(currentPage*10<total){
+        setCurrentPage(currentPage+1)
+      }else{
+        message.warning('已全部加载完成')
+      }
+    
     }
   };
+
+  useEffect(() => {
+    if(!ifSearch)
+    {
+      appendData()
+    }
+  },[currentPage])
 
   const options: SearchOptionType[] = [
     {
@@ -75,12 +102,14 @@ export default function Home() {
     },
   ];
 
-  const appendData = () => {
-    const res = request.get('/api/hotel/list')
-    res.then((result: any) => {
-      setData(data.concat(result.data))
-    })
-    message.success(`10 more items loaded!`)
+  const appendData = async () => {
+    const res = await request.get(`/api/hotel/list?page=${currentPage}`+queryurl)
+  
+    setData(data.concat(res.data))
+    if(currentPage!==1){
+      message.success(`已加载更多`)
+    }
+    
   }
 
   // const onChange = (value: any) => {
@@ -91,11 +120,10 @@ export default function Home() {
   const displayRender = (labels: string[]) => labels[labels.length - 1];
 
   const [name, setName] = useState('');
-  console.log("🚀 ~ file: index.tsx:97 ~ name:", name)
+  console.log("🚀 ~ file: index.tsx:107 ~ name:", name)
   const [area, setArea] = useState<string[]>([]);
-  console.log("🚀 ~ file: index.tsx:99 ~ area:", area)
   const [star, setStar] = useState(undefined);
-  console.log("🚀 ~ file: index.tsx:101 ~ star:", star)
+  
   const handleNameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setName(event.target.value);
   };
@@ -222,7 +250,8 @@ export default function Home() {
             ]}
           >            
           </List.Item > */}
-      <div>
+          <Empty style={{display : data==null ? 'inline-block' : 'none'  ,width:'100%'}}></Empty>
+      <div  id='scrollbox'>
         <List >
           <VirtualList
             data={data}
@@ -231,6 +260,7 @@ export default function Home() {
             itemKey="id"
             onScroll={onScroll}
             className={styles.list}
+           
           >
             {(item: any) => (
               <List.Item key={item.id} className={styles.box}>

@@ -13,6 +13,7 @@ import styles from './index.module.css';
 import { setLogout } from '@/api/user';
 import { SnippetsOutlined, HomeOutlined } from "@ant-design/icons";
 import Link from 'next/link';
+import request from '@/utils/request';
 
 const { Header, Content, Sider } = Antdlayout;
 
@@ -63,7 +64,7 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
         {
             label: (<span
                 onClick={async () => {
-                    await setLogout();
+                    const res = await request.get(`/api/logout`)
                     localStorage.removeItem("user");
                     message.success("退出成功");
                     router.push("/login");

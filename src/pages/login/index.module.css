@@ -1,23 +1,36 @@
-.main {
+.body {
+  width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+
+.background {
+  height: 100%;
+  width: 70%;
+}
+
+.loginbox {
+  z-index: 0;
+  min-width: 500px;
+  width: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.header {
-  font-size: 48px;
-  margin-bottom: 40px;
-  color: #487bd7;
-}
-
-.img {
-  margin-right: 10px;
+.switcher {
+  width: 30%;
+  position: relative;
+  margin: auto;
 }
 
 .form {
-  height: 300px;
   width: 500px;
   padding: 20px;
   background-color: #fff;
@@ -29,17 +42,26 @@
   font-size: 16px;
 }
 
-.title {
-  font-size: 30px;
+.tabItem {
+  width: 220px;
   text-align: center;
+}
+
+
+
+.formhead {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.formtitle {
+  position: relative;
+  top: -12px;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 10px;
   margin: 20px;
-  color: #487bd7;
-}
-
-.btn {
-  width: 45%;
-}
-
-.loginBtn {
-  margin-right: 10%;
+  color: #007fe9;
+  font-family: '微软雅黑'
 }
