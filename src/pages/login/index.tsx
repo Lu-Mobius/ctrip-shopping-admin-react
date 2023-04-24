@@ -2,7 +2,7 @@
 import Head from 'next/head'
 import request from "@/utils/request";
 import styles from "./index.module.css";
-import { Space, Tabs, message } from 'antd';
+import { Tabs, message } from 'antd';
 import { useRouter } from 'next/router';
 import { UserLoginType } from '@/type/user';
 import classnames from "classnames";
@@ -10,26 +10,19 @@ import { SetStateAction, useState } from 'react';
 import LoginForm from '@/components/LoginForm';
 import RegistrationForm from '@/components/RegisterForm';
 import { RegistrationFormValues } from '@/type/user';
-import ReactPlayer from 'react-player';
 import BackgroundVideo from '@/components/BackgroundVideo';
 import type { TabsProps } from 'antd';
 
 
 export default function Home() {
   const router = useRouter();
-  // 定义 onFinish 函数，用于处理登录表单提交事件
-  const [isLogin, setIsLogin] = useState(true); // 默认显示登录表单
+  //activeTab用于切换登录/注册选项 默认激活登录标签页
   const [activeTab, setActiveTab] = useState('login');
 
+  // 处理登录表单提交事件
   const onFinish = async (values: UserLoginType) => {
     try {
-      console.log("🚀 ~ file: index.tsx:17 ~ onFinish ~ values:", values)
       const res = await request.post("/api/login", values);
-      console.log(
-        "%c [ res ]-17",
-        "font-size:13px; background:pink; color:#bf2c9f;",
-        res
-      );
       if (res.success == true) {
         localStorage.setItem("user", JSON.stringify(res.data));
         message.success("登陆成功");
@@ -47,8 +40,8 @@ export default function Home() {
     }
   };
 
+  // 处理注册表单提交事件
   const onFinishRegister = async (values: RegistrationFormValues) => {
-
     console.log('Received values of form: ', values);
     try {
       const response = await request.post("/api/users", values);
@@ -60,18 +53,18 @@ export default function Home() {
       } else {
         message.error('创建用户失败，请重试')
       }
-      // TODO: 提交表单数据到后端
     } catch (error) {
       console.error("Registration error:", error);
       message.error('服务器异常，请重试')
-      // 处理注册失败的情况，比如显示错误提示
     }
   }
+
+  // 处理Tab栏切换
   const handleTabChange = (key: SetStateAction<string>) => {
     setActiveTab(key);
-    setIsLogin(key === 'login');
   };
 
+  // Tabs 组件中的 items 数组的类型，分别包含两个Form组件LoginForm和RegistrationForm
   const items: TabsProps['items'] = [
     {
       key: 'login',
@@ -117,7 +110,7 @@ export default function Home() {
         <title>携程购物管理平台</title>
         <meta name="description" content="携程购物管理平台" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/financeLogo.png" />
+        <link rel="icon" href="favicon.ico" />
       </Head>
       <div className={styles.body}>
         <div className={styles.background}>

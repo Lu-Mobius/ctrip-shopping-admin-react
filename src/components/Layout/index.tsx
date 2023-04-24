@@ -63,8 +63,8 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
         },
         {
             label: (<span
-                onClick={async () => {
-                    const res = await request.get(`/api/logout`)
+                onClick={() => {
+                    const res = request.get(`/api/logout`)
                     localStorage.removeItem("user");
                     message.success("退出成功");
                     router.push("/login");

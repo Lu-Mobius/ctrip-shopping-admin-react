@@ -35,3 +35,15 @@ export interface HotelComment {
     updatedAt: string;
     __v: number;
 }
+
+export interface HotelListItem {
+    img_show: string;
+    hotel_name: string;
+    star_number: string;
+    cooperation_level: string;
+    rating: number;
+    comments_number: number;
+    price: number;
+    _id: string;
+}
+

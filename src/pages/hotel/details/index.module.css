@@ -4,7 +4,7 @@
     min-width: 500px;
     overflow-x: hidden;
     width: 100%;
-    padding: 20px;
+    margin: 20px;
 
 }
 
@@ -25,9 +25,10 @@
 }
 
 .display_page_top {
-    height: 100px;
+
     display: flex;
     flex-direction: row;
+    margin-bottom: 10px;
 }
 
 .display_page_top_left {
@@ -50,7 +51,7 @@
 
 
 .hotel_name {
-    font-size: 20px;
+    font-size: 28px;
     color: #0f294d;
     display: inline;
     margin-right: 8px;
@@ -246,11 +247,12 @@
 
 .commentbox {
     position: relative;
-    left: 10px;
+    left: 20px;
     top: 30%;
     text-align: left;
     width: 100%;
     margin-top: 30px;
+
 }
 
 .rating_level {
@@ -268,7 +270,7 @@
     line-height: 18px;
     font-size: 12px;
     position: relative;
-    left: 20px;
+    left: 28px;
     cursor: pointer;
 
 }
@@ -316,11 +318,12 @@
     position: -webkit-sticky;
     top: 0;
     z-index: 100;
+    margin-top: -10px;
 }
 
 .room {
     width: 100%;
-    border-bottom: 10px solid #fff;
+    border-bottom: 10px solid #eee;
     display: flex;
 }
 
@@ -462,12 +465,11 @@
 
 .remark {
     width: 100%;
-    border-top: 10px solid #eee;
+
 }
 
 .policy {
-    background: #bbb;
-    height: 1000px;
+
     border-bottom: 10px solid #fff
 }
 
@@ -478,7 +480,7 @@
 }
 
 .remark_head {
-    padding-top: 30px;
+    margin-top: 30px;
     padding-left: 10px;
     display: flex;
     flex-direction: row;

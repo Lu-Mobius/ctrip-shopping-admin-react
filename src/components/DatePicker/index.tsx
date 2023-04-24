@@ -15,7 +15,7 @@ export function DatePickerModule(props: DatePickerModuleProps) {
     const { RangePicker } = DatePicker;
     const disabledDate: RangePickerProps['disabledDate'] = (current) => {
         // Can not select days before today and today
-        return current && current < dayjs().endOf('day');
+        return current && current < dayjs().startOf('day');
     };
 
     const handleDateRangeChange = (dates: any, dateStrings: any) => {

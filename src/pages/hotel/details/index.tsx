@@ -16,6 +16,8 @@ import request from '@/utils/request';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { UserType } from '@/type/user';
 import { useCurrentUser } from '@/utils/useCurrentUser';
+import MapComponent from '@/components/BaiduMaps';
+import convertToCoordinates from '@/utils/AddressToPointMap';
 
 export default function Home() {
 
@@ -144,6 +146,19 @@ export default function Home() {
     }
   };
 
+  const [markerPosition, setMarkerPosition] = useState({ lng: 31.23, lat: 121.47 });
+  // 获取地理位置坐标信息函数（用于设置初始化赋值，直接设置useState会导致初始化异常，所以在组件加载完成后执行一次函数进行初始化）
+
+  async function fetchCoordinates() {
+    const { lat, lng } = await convertToCoordinates(data.location);
+    setMarkerPosition({ lat, lng });
+  }
+
+  // 在组件加载完成后获取地理位置坐标信息
+  useEffect(() => {
+    fetchCoordinates();
+  }, [data]);
+
   // 定义了三个回调函数，从子组件获取状态
   const handleRoomCountChange = (count: number) => {
     setRoomCount(count);
@@ -230,17 +245,17 @@ export default function Home() {
       <Row className={styles.display_page} >
         <div className={styles.display_page_top}>
           <div className={styles.display_page_top_left}>
-            <div className={styles.titlebox}>
+            <div className={styles.titlebox} style={{ marginBottom: 4 }}>
               <div className={styles.hotel_name}>{data.hotel_name}</div>
               <StarBox count={!data.star_number ? 0 : data.star_number} />
               <div className={styles.cooperationbox}>
                 <Popover content={'携程紧密合作酒店/供应商，为携程会员提供优惠房价。'} trigger="hover">
 
-                  <div style={{ display: data.cooperation_level == '1' ? 'inline-block' : 'none' }}
+                  <div style={{ display: data.cooperation_level == '1' ? 'inline-block' : 'none', marginTop: 11 }}
                     className={styles.cooperationicon1}></div>
                 </Popover>
                 <Popover content={'携程战略合作酒店/供应商，拥有优质服务、优良品质及优惠房价。'} trigger="hover">
-                  <div style={{ display: data.cooperation_level == '2' ? 'inline-block' : 'none' }}
+                  <div style={{ display: data.cooperation_level == '2' ? 'inline-block' : 'none', marginTop: 11 }}
                     className={styles.cooperationicon2}></div>
                 </Popover>
               </div>
@@ -286,19 +301,20 @@ export default function Home() {
             <div className={styles.commentbox}>
               <div className={styles.rate_number}>{data.rating}<div style={{ display: 'inline', fontWeight: 300, fontSize: 16 }}>分</div></div>
               <div style={{ display: data.rating == 4.5 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-              <div style={{ display: data.rating == 4.6 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-              <div style={{ display: data.rating == 4.7 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-              <div style={{ display: data.rating == 4.8 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-              <div style={{ display: data.rating == 4.9 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-              <div style={{ display: data.rating == 5.0 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
+              <div style={{ display: data.rating == 4.6 ? 'inline' : 'none' }} className={styles.rating_level}>好</div>
+              <div style={{ display: data.rating == 4.7 ? 'inline' : 'none' }} className={styles.rating_level}>很好</div>
+              <div style={{ display: data.rating == 4.8 ? 'inline' : 'none' }} className={styles.rating_level}>非常好</div>
+              <div style={{ display: data.rating == 4.9 ? 'inline' : 'none' }} className={styles.rating_level}>非常棒</div>
+              <div style={{ display: data.rating == 5.0 ? 'inline' : 'none' }} className={styles.rating_level}>非常棒</div>
             </div>
             <a rel="stylesheet" href="#part-2" >
               <p className={styles.comment_number} onClick={() =>
                 document.querySelector('#part-2')?.scrollIntoView
               }>显示所有{data.comments_number}条评论</p>
             </a>
-            <div className={styles.mapbox}>地图</div>
-            <div className={styles.facilitybox}>棋牌室|24小时前台服务|会议室</div>
+            <div className={styles.mapbox} style={{ width: '90%', height: '30%', marginLeft: '3%', marginTop: '32px' }}>
+              <MapComponent center={markerPosition} markerPosition={markerPosition} hotel_name={data.hotel_name} />
+            </div>
           </div>
         </div >
       </Row >
@@ -474,7 +490,38 @@ export default function Home() {
 
       </Row>
       <Row id='part-3' className={styles.policy}>
-        3
+        <div className={styles.remark_head} >
+          <div className={styles.remark_head_left}>酒店政策</div>
+        </div>
+        <div className={styles.remarkbox} style={{ margin: 10, paddingBottom: 10, borderBottom: "1px solid #dadfe6" }}>
+          <div className={styles.remarkbox_left}>
+            <div className={styles.remarkbox_left_namebox} style={{ fontSize: 18, color: '#0f294d', fontWeight: '700' }}>
+              预订提示
+              <div className={styles.remarkbox_left_name}></div>
+            </div>
+          </div>
+          <div className={styles.remarkbox_right}>订单需等酒店或供应商确认后生效，订单确认结果以携程短信、邮件或app通知为准。</div>
+        </div>
+
+        <div className={styles.remarkbox} style={{ margin: 10, paddingBottom: 10, borderBottom: "1px solid #dadfe6" }}>
+          <div className={styles.remarkbox_left}>
+            <div className={styles.remarkbox_left_namebox} style={{ fontSize: 18, color: '#0f294d', fontWeight: '700' }}>
+              儿童及加床
+              <div className={styles.remarkbox_left_name}></div>
+            </div>
+          </div>
+          <div className={styles.remarkbox_right}>不同房型加床和婴儿床政策不同，请以预订房型内政策为准</div>
+        </div>
+        <div className={styles.remarkbox} style={{ margin: 10, paddingBottom: 10, borderBottom: "1px solid #dadfe6" }}>
+          <div className={styles.remarkbox_left}>
+            <div className={styles.remarkbox_left_namebox} style={{ fontSize: 18, color: '#0f294d', fontWeight: '700' }}>
+              年龄限制
+              <div className={styles.remarkbox_left_name}></div>
+            </div>
+          </div>
+          <div className={styles.remarkbox_right}>不允许18岁以下单独办理入住</div>
+        </div>
+
       </Row>
 
     </div >

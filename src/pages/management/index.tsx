@@ -99,41 +99,46 @@ export default function Home() {
     ];
     return (
         <div className={styles.body} ref={setContainer}>
-            <Form
-                form={form}
-                name="search"
-                onFinish={handleSearchFinish}
-                initialValues={{
-                    name: '', area: '', star: undefined
-                }}
-            >
-                <Row gutter={30}>
-                    <Col span={5}>
-                        <Form.Item name="userName" label="用户名称" >
-                            <Input placeholder='请输入' allowClear />
-                        </Form.Item>
-                    </Col>
+            <div className={styles.tabletitlebox}><div className={styles.tabletitle} >订单管理</div>
+                <Form
+                    form={form}
+                    name="search"
+                    onFinish={handleSearchFinish}
+                    initialValues={{
+                        name: '', area: '', star: undefined
+                    }}
+                    className={styles.tableform}
 
-                    <Col span={5}>
-                        <Form.Item name="hotel_name" label="酒店名称" >
-                            <Input placeholder='请输入' allowClear />
-                        </Form.Item>
-                    </Col>
 
-                    <Col span={5}>
-                        <Form.Item>
-                            <Space>
-                                <Button type="primary" htmlType="submit">
-                                    搜索
-                                </Button>
-                                <Button htmlType="submit" onClick={handleSearchReset}>
-                                    清空
-                                </Button>
-                            </Space>
-                        </Form.Item>
-                    </Col>
-                </Row >
-            </Form>
+                >
+                    <Row gutter={30}>
+                        <Col span={6}>
+                            <Form.Item name="userName" label="用户名称" >
+                                <Input placeholder='请输入' allowClear />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item name="hotel_name" label="酒店名称" >
+                                <Input placeholder='请输入' allowClear />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item>
+                                <Space>
+                                    <Button type="primary" htmlType="submit">
+                                        搜索
+                                    </Button>
+                                    <Button htmlType="submit" onClick={handleSearchReset}>
+                                        清空
+                                    </Button>
+                                </Space>
+                            </Form.Item>
+                        </Col>
+                    </Row >
+                </Form>
+            </div>
 
             <div className={styles.selector}>
                 <Segmented options={[

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Button, Cascader, Col, Form, Input, Row, Select, Space, Avatar, List, message, Image, Popover, Empty } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
@@ -14,25 +14,26 @@ import { HotelQueryType, SearchOptionType } from '@/type/hotel';
 import { promises } from 'dns';
 import request from '@/utils/request';
 import qs from 'qs';
+import MapComponent from '@/components/BaiduMaps';
+import convertToCoordinates from '@/utils/AddressToPointMap';
+import { HotelVirtualListItem } from '@/components/HotelVirtualListItem';
 
 export default function Home() {
-  //useState hook更新data状态
+  //定义组件内部使用的state：data(酒店列表数据)，total（酒店总数），currentPage（当前页码），queryurl（查询url），ifSearch（搜索状态判断）
   const [data, setData] = useState([])
   const [total, setTotal] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
-  const [queryurl,setqueryurl]= useState('')
-  const [ifSearch,setIfSearch]= useState(false)
-  console.log("🚀 ~ file: index.tsx:22 ~ currentPage:", currentPage)
-
+  const [queryurl, setqueryurl] = useState('')
+  const [ifSearch, setIfSearch] = useState(false)
+  // markerPosition用于处理地图标记位置，根据鼠标选择的酒店在地图上打印标记点
+  const [markerPosition, setMarkerPosition] = useState({ lng: 31.23, lat: 121.47 });
+  const [hotel_name, setHotelName] = useState('');
   // 获取表单实例，设置初始化的点击事件
   const [form] = Form.useForm()
 
-  const handleSearchReset = (values: any) => {
-    form.resetFields()
-  }
-
   const router = useRouter()
-  // 空数组表示页面dom加载完毕时触发,获取hotel列表
+
+  // 组件加载完成时获取酒店列表数据
   useEffect(() => {
     async function fetchData() {
       const res = await request.get(`/api/hotel/list?page=${currentPage}`)
@@ -42,46 +43,58 @@ export default function Home() {
     fetchData()
   }, [])
 
-  
+  // 获取地理位置坐标信息函数（用于设置初始化赋值，直接设置useState会导致初始化异常，所以在组件加载完成后执行一次函数进行初始化）
+  async function fetchCoordinates() {
+    const { lat, lng } = await convertToCoordinates('上海市');
+    setMarkerPosition({ lat, lng });
+  }
+
+  // 在组件加载完成后获取地理位置坐标信息
+  useEffect(() => {
+    fetchCoordinates();
+  }, []);
+
+  // 处理表单清空的函数
+  const handleSearchReset = (values: any) => {
+    form.resetFields()
+  }
+
+  // 处理表单提交的函数
   const handleSearchFinish = async (values: HotelQueryType) => {
     try {
-      setqueryurl(`&hotel_name=${name}&area=${area[1] !==undefined  ? area[1] : ''}&star_number=${star !==undefined ? star : ''}`)
+      setqueryurl(`&hotel_name=${name}&area=${area[1] !== undefined ? area[1] : ''}&star_number=${star !== undefined ? star : ''}`)
       setCurrentPage(1)
       setIfSearch(true)
-      console.log("🚀 ~ file: index.tsx:49 ~ handleSearchFinish ~ setqueryurl:", setqueryurl)
-      const res = await request.get(`/api/hotel/list?hotel_name=${name}&area=${area[1] !==undefined  ? area[1] : ''}&star_number=${star !==undefined ? star : ''}`);
+      const res = await request.get(`/api/hotel/list?hotel_name=${name}&area=${area[1] !== undefined ? area[1] : ''}&star_number=${star !== undefined ? star : ''}`);
       setData(res.data);
-      
+
       setTotal(res.total)
-      const scrollbox=document.querySelector('#scrollbox>div>div>div>div>div') as Element
-      console.log("🚀 ~ file: index.tsx:56 ~ handleSearchFinish ~ scrollbox:", scrollbox)
-      scrollbox.scrollTo(0,0)
-      console.log("🚀 ~ file: index.tsx:58 ~ handleSearchFinish ~ scrollbox:", scrollbox)
+      const scrollbox = document.querySelector('#scrollbox>div>div>div>div>div') as Element
+      scrollbox.scrollTo(0, 0)
     } catch (error) {
       console.error(error);
     }
   }
 
   // 滚动条高度与滚动事件
-  const ContainerHeight = 700
-  const onScroll =  async (e: React.UIEvent<HTMLElement, UIEvent>) => {
+  const ContainerHeight = 700 // 容器高度
+  const onScroll = async (e: React.UIEvent<HTMLElement, UIEvent>) => {
     setIfSearch(false)
+    // 当滚动至底部时，判断是否需要加载更多数据（根据total酒店总数进行判断是否发送请求）
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
-      if(currentPage*10<total){
-        setCurrentPage(currentPage+1)
-      }else{
+      if (currentPage * 10 < total) {
+        setCurrentPage(currentPage + 1)
+      } else {
         message.warning('已全部加载完成')
       }
-    
     }
   };
 
   useEffect(() => {
-    if(!ifSearch)
-    {
+    if (!ifSearch) {
       appendData()
     }
-  },[currentPage])
+  }, [currentPage])
 
   const options: SearchOptionType[] = [
     {
@@ -103,13 +116,13 @@ export default function Home() {
   ];
 
   const appendData = async () => {
-    const res = await request.get(`/api/hotel/list?page=${currentPage}`+queryurl)
-  
+    const res = await request.get(`/api/hotel/list?page=${currentPage}` + queryurl)
+
     setData(data.concat(res.data))
-    if(currentPage!==1){
+    if (currentPage !== 1) {
       message.success(`已加载更多`)
     }
-    
+
   }
 
   // const onChange = (value: any) => {
@@ -120,10 +133,9 @@ export default function Home() {
   const displayRender = (labels: string[]) => labels[labels.length - 1];
 
   const [name, setName] = useState('');
-  console.log("🚀 ~ file: index.tsx:107 ~ name:", name)
   const [area, setArea] = useState<string[]>([]);
   const [star, setStar] = useState(undefined);
-  
+
   const handleNameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setName(event.target.value);
   };
@@ -137,9 +149,11 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: 30 }}>
+    <div style={{ padding: '20px' }}>
       {/* 顶部搜索栏 */}
-      <div style={{ paddingLeft: 50 }}>
+
+      <div style={{ paddingRight: 40, paddingLeft: 10, display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'flex-start' }} >
+        <div className={styles.tabletitle} >酒店预订</div>
         <Form
           form={form}
           name="search"
@@ -147,15 +161,17 @@ export default function Home() {
           initialValues={{
             name: '', area: '', star: undefined
           }}
+          className={styles.searchform}
+          style={{ marginTop: 20, width: '70%', height: 40, padding: 5 }}
         >
           <Row gutter={30}>
             <Col span={8}>
-              <Form.Item name="name" label="酒店名称" >
+              <Form.Item name="name" label="酒店名称" className={styles.buttonsearch} >
                 <Input placeholder='请输入' allowClear onChange={handleNameChange} />
               </Form.Item>
             </Col>
             <Col span={5}>
-              <Form.Item name="area" label="地区" >
+              <Form.Item name="area" label="地区" className={styles.buttonsearch}>
                 <Cascader
                   showSearch
                   allowClear
@@ -170,7 +186,7 @@ export default function Home() {
               </Form.Item>
             </Col>
             <Col span={5}>
-              <Form.Item name="star" label="星级" >
+              <Form.Item name="star" label="星级" className={styles.buttonsearch}>
                 <Select
                   placeholder='请输入'
                   showSearch
@@ -189,22 +205,54 @@ export default function Home() {
                 />
               </Form.Item>
             </Col>
-            <Col span={5}>
+            <Col span={6}>
               <Form.Item>
-                <Space>
-                  <Button type="primary" htmlType="submit">
-                    搜索
-                  </Button>
-                  <Button htmlType="submit" onClick={handleSearchReset}>
-                    清空
-                  </Button>
-                </Space>
+
+                <Button type="primary" htmlType="submit" className={styles.buttonsearch}>
+                  搜索
+                </Button>
+                <Button htmlType="submit" onClick={handleSearchReset} className={styles.buttonsearch}>
+                  清空
+                </Button>
+
               </Form.Item>
             </Col>
           </Row >
         </Form>
       </div>
-      {/* <List className={styles.list}
+      <div className={styles.listwithmap}  >
+
+        <Empty style={{ display: data == null ? 'inline-block' : 'none', width: '100%' }}></Empty>
+        <div id='scrollbox'>
+          <div style={{ width: 400, position: 'absolute', top: 233, left: 250, zIndex: '1' }}>
+            <MapComponent center={markerPosition} markerPosition={markerPosition} hotel_name={hotel_name} />
+          </div>
+          <List >
+            <VirtualList
+              data={data}
+              height={ContainerHeight}
+              itemHeight={100}
+              itemKey="id"
+              onScroll={onScroll}
+              className={styles.list}
+
+            >
+              {(item: any) => (
+                <List.Item key={item.id} className={styles.box} onMouseOver={async () => {
+                  const { lat, lng } = await convertToCoordinates(item.location);
+                  setMarkerPosition({ lat, lng });
+                  setHotelName(item.hotel_name);
+                }} >
+                  <HotelVirtualListItem key={item.id} item={item} />
+                </List.Item>
+              )}
+            </VirtualList>
+
+
+          </List>
+
+          {/* 之前实现的一个分页列表
+  <List className={styles.list}
         itemLayout="vertical"
         size="large"
 
@@ -250,97 +298,8 @@ export default function Home() {
             ]}
           >            
           </List.Item > */}
-          <Empty style={{display : data==null ? 'inline-block' : 'none'  ,width:'100%'}}></Empty>
-      <div  id='scrollbox'>
-        <List >
-          <VirtualList
-            data={data}
-            height={ContainerHeight}
-            itemHeight={100}
-            itemKey="id"
-            onScroll={onScroll}
-            className={styles.list}
-           
-          >
-            {(item: any) => (
-              <List.Item key={item.id} className={styles.box}>
+        </div>
 
-
-                {/* 左边栏 */}
-                <div className={styles.leftbox}>
-                  <Image className={styles.leftimage} src={item.img_show} />
-
-                  <div className={styles.titlebox}>
-                    <div className={styles.title}>{item.hotel_name}</div>
-
-                    <div className={styles.starbox} style={{ display: item.star_number > '0' ? 'inline-block' : 'none' }}>
-                      <div style={{ display: item.star_number >= '1' ? 'inline-block' : 'none' }} >⭐</div>
-                      <div style={{ display: item.star_number >= '2' ? 'inline-block' : 'none' }}>⭐</div>
-                      <div style={{ display: item.star_number >= '3' ? 'inline-block' : 'none' }}>⭐</div>
-                      <div style={{ display: item.star_number >= '4' ? 'inline-block' : 'none' }}>⭐</div>
-                      <div style={{ display: item.star_number >= '5' ? 'inline-block' : 'none' }} >⭐</div>
-                    </div>
-                    <div className={styles.cooperationbox}>
-                      <Popover content={'携程紧密合作酒店/供应商，为携程会员提供优惠房价。'} trigger="hover">
-                        <div style={{ display: item.cooperation_level == '1' ? 'inline-block' : 'none' }}
-                          className={styles.cooperationicon1}></div>
-                      </Popover>
-                      <Popover content={'携程战略合作酒店/供应商，拥有优质服务、优良品质及优惠房价。'} trigger="hover">
-                        <div style={{ display: item.cooperation_level == '2' ? 'inline-block' : 'none' }}
-                          className={styles.cooperationicon2}></div>
-                      </Popover>
-                    </div>
-
-
-
-
-                  </div>
-
-                </div>
-                {/* 右边栏 */}
-                <div className={styles.rightbox}>
-                  <div className={styles.scorebox}>
-                    <div className={styles.comment_box}>
-                      <div style={{ display: item.rating == 4.5 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-                      <div style={{ display: item.rating == 4.6 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-                      <div style={{ display: item.rating == 4.7 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-                      <div style={{ display: item.rating == 4.8 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-                      <div style={{ display: item.rating == 4.9 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-                      <div style={{ display: item.rating == 5.0 ? 'inline' : 'none' }} className={styles.rating_level}>不错</div>
-
-
-                      <div className={styles.comment_number}>{item.comments_number}条评论</div>
-
-
-                    </div>
-                    <div className={styles.rate_number}>{item.rating}</div>
-                  </div>
-                  {/* 价格 */}
-                  <Link href={{ pathname: '/hotel/details' }}  >
-                    <div className={styles.pricebox}>
-                      <div className={styles.price}>￥{item.price}</div>
-                      <div className={styles.pricetext}>起</div>
-                    </div>
-                  </Link>
-                  {/* 查看详情按钮 */}
-                  <div style={{ marginLeft: 'auto' }}>
-                    {/* <Link href={{ pathname: '/hotel/details?id='}} data-id={item.id}> */}
-                    <Button type="primary" className={styles.button} onClick={() => {
-                      router.push({
-                        pathname: '/hotel/details',
-                        query: { id: item._id },
-                      })
-                    }
-                    }>查看详情</Button>
-                    {/* </Link> */}
-                  </div>
-
-                </div>
-
-              </List.Item>
-            )}
-          </VirtualList>
-        </List>
       </div>
 
     </div >
