@@ -1,0 +1,27 @@
+.list {
+    padding-left: 400px;
+    padding-right: 30px;
+}
+
+.listwithmap {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.tabletitle {
+    font-size: 30px;
+    padding-bottom: 40px;
+    font-weight: 600;
+    color: #2577E3;
+    white-space: nowrap;
+}
+
+.searchform {
+    background-color: #eee;
+    white-space: nowrap;
+    margin-left: 15.5%;
+}
+
+.buttonsearch {
+    margin-left: 10%;
+}

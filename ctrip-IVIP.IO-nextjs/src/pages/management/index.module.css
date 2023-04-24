@@ -1,0 +1,169 @@
+.body {
+    height: calc(100vh - 180px);
+    overflow-y: scroll;
+}
+
+.list {
+    display: flex;
+}
+
+.indent {
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #2477e3;
+    min-width: 1000px;
+}
+
+
+.head {
+    padding: 5px;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    background-color: #f6f6f6;
+}
+
+.head div {
+    color: #333;
+}
+
+.indent_body {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.indent_body div {
+    color: #333;
+    margin: 5px;
+}
+
+.text>div {
+    text-align: left
+}
+
+.hotel_name {
+    font-size: 20px;
+    line-height: 20px;
+    color: #111;
+    font-weight: 700;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 10px;
+
+}
+
+.bottom button {
+    color: #2477e3;
+    border: 1px solid #2477e3;
+
+}
+
+.money_box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+}
+
+.money {
+
+    display: flex;
+    flex-direction: row;
+}
+
+.totalPrice {
+    height: 30px;
+    line-height: 12px;
+    color: #0086f6 !important;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.state {
+    padding-right: 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.selector {
+    width: 100%;
+    padding: 0 50px;
+}
+
+.list {
+    display: flex;
+    flex-direction: row;
+}
+
+.userbox {
+    padding: 20px;
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #0086f6;
+    width: 300px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.username {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.Nickname {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #0086f6;
+}
+
+.balancebox {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.balance {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 12px;
+    color: #0086f6
+}
+
+.Rechargebox {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabletitle {
+    font-size: 30px;
+    margin: 20px 30px 20px 30px;
+
+    padding-bottom: 40px;
+    font-weight: 600;
+    color: #2577E3;
+    white-space: nowrap;
+}
+
+.tabletitlebox {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.tableform {
+    width: 100%;
+    margin-left: 5%;
+    margin-top: 30px;
+}
