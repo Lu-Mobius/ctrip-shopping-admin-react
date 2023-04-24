@@ -147,6 +147,7 @@ export default function Home() {
                     { label: '已支付', value: 1 },
                     { label: '已完成', value: 3 },
                     { label: '已取消', value: 2 },
+                    { label: '已删除', value: 4 },
 
                 ]}
                     value={status}

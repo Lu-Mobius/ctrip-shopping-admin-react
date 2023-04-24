@@ -18,7 +18,7 @@ export default function Home() {
   const router = useRouter();
   //activeTab用于切换登录/注册选项 默认激活登录标签页
   const [activeTab, setActiveTab] = useState('login');
-
+  const [clear,setClear]=useState(false);
   // 处理登录表单提交事件
   const onFinish = async (values: UserLoginType) => {
     try {
@@ -48,6 +48,7 @@ export default function Home() {
       if (response.success) {
         message.success('创建用户成功！')
         setActiveTab('login')
+        setClear((prevClear) => !prevClear);
       } else if (response.exist) {
         message.error('用户已存在，不允许重复创建！')
       } else {
@@ -62,6 +63,7 @@ export default function Home() {
   // 处理Tab栏切换
   const handleTabChange = (key: SetStateAction<string>) => {
     setActiveTab(key);
+    
   };
 
   // Tabs 组件中的 items 数组的类型，分别包含两个Form组件LoginForm和RegistrationForm
@@ -98,7 +100,7 @@ export default function Home() {
       ),
       children: (
         <div>
-          <RegistrationForm clear={false} onFinish={onFinishRegister} />
+          <RegistrationForm clear={clear} onFinish={onFinishRegister} />
         </div>
       ),
     },

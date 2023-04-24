@@ -38,8 +38,7 @@ function CommentForm(props: CommentFormProps) {
                 // 提交成功，提示用户
                 message.success('评论成功');
                 await router.push(`/hotel/details/?id=${item.hotelId}`);//异步等待跳转结束再定向到评论
-                console.log('开始滚动');
-                document.querySelector('#part-2')?.scrollIntoView();
+
             } else {
                 // 提交失败，提示用户错误信息
                 message.error('评论失败，请稍后再试');

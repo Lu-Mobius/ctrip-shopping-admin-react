@@ -351,7 +351,7 @@ export default function Home() {
           <DatePickerModule onDateRangeChange={handleDateRangeChange} />
           <RoomSelector onRoomCountChange={handleRoomCountChange}
             onGuestCountChange={handleGuestCountChange} />
-          <p >{dateRangeDiff} 晚</p>
+          <p  style={{marginTop:4}}>{dateRangeDiff} 晚</p>
         </div>
         <List
           itemLayout="horizontal"

@@ -17,6 +17,7 @@ import qs from 'qs';
 import MapComponent from '@/components/BaiduMaps';
 import convertToCoordinates from '@/utils/AddressToPointMap';
 import { HotelVirtualListItem } from '@/components/HotelVirtualListItem';
+import { useCurrentUser } from '@/utils/useCurrentUser';
 
 export default function Home() {
   //定义组件内部使用的state：data(酒店列表数据)，total（酒店总数），currentPage（当前页码），queryurl（查询url），ifSearch（搜索状态判断）
@@ -30,6 +31,7 @@ export default function Home() {
   const [hotel_name, setHotelName] = useState('');
   // 获取表单实例，设置初始化的点击事件
   const [form] = Form.useForm()
+  const currentUser = useCurrentUser();
 
   const router = useRouter()
 
@@ -57,6 +59,9 @@ export default function Home() {
   // 处理表单清空的函数
   const handleSearchReset = (values: any) => {
     form.resetFields()
+    setName('')
+    setArea([])
+    setStar(undefined)
   }
 
   // 处理表单提交的函数
@@ -133,8 +138,11 @@ export default function Home() {
   const displayRender = (labels: string[]) => labels[labels.length - 1];
 
   const [name, setName] = useState('');
+  console.log("🚀 ~ file: index.tsx:138 ~ name:", name)
   const [area, setArea] = useState<string[]>([]);
+  console.log("🚀 ~ file: index.tsx:140 ~ area:", area)
   const [star, setStar] = useState(undefined);
+  console.log("🚀 ~ file: index.tsx:142 ~ star:", star)
 
   const handleNameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setName(event.target.value);
@@ -174,7 +182,7 @@ export default function Home() {
               <Form.Item name="area" label="地区" className={styles.buttonsearch}>
                 <Cascader
                   showSearch
-                  allowClear
+                  allowClear={false}
                   placeholder='请选择'
                   options={options}
                   expandTrigger="hover"
@@ -192,7 +200,7 @@ export default function Home() {
                   showSearch
                   // 按照label值进行搜索
                   optionFilterProp='label'
-                  allowClear
+  
                   options={[
                     { value: '1', label: '一星级' },
                     { value: '2', label: '二星级' },

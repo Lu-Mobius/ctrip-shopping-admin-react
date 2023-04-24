@@ -2,5 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/login": "pages/login.js"
+  "/hotel": "pages/hotel.js",
+  "/management/user": "pages/management/user.js",
+  "/login": "pages/login.js",
+  "/management": "pages/management.js"
 }

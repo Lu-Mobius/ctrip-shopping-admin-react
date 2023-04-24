@@ -135,7 +135,7 @@ export default function Home() {
 
     return (
         <div className={styles.body} ref={setContainer}>
-            <div className={styles.tabletitle} >订单管理</div>
+            <div className={styles.tabletitle} >订单查询</div>
             <div className={styles.selector}>
                 <Segmented options={[
                     { label: '全部', value: 100 },
