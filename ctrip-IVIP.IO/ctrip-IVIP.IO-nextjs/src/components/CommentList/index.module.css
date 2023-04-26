@@ -1,0 +1,64 @@
+.remarkbox {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.remark_head {
+    margin-top: 30px;
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.remark_head_left {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #0f294d;
+    line-height: 24px;
+    font-weight: bold;
+}
+
+.remark_head_right {
+    color: #999;
+    font-size: 18px;
+    margin-left: 8px;
+    line-height: 35px;
+    font-weight: bold;
+}
+
+.remarkbox_left {
+    min-width: 112px;
+    width: 26.5%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 50px;
+    border-right: 2px solid #dadfe6;
+}
+
+.remarkbox_left_namebox {
+    display: flex;
+    flex-direction: row;
+}
+
+.remarkbox_left_name {
+    padding-top: 5px;
+    font-size: 16px;
+    word-break: break-all;
+}
+
+.remarkbox_left_name {
+    color: #666;
+    font-size: 18px;
+    margin-left: 20px;
+    line-height: 30px;
+    font-weight: bold;
+}
+
+.remarkbox_time {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+}

@@ -18,14 +18,15 @@ export const CreateFetchInstance = (
     baseUrl: string,
     headers?: Record<string, string>
 ): FetchInstanceType => {
-    // 定义 getHeaders 函数，返回 headers 对象，包括用户信息的 userToken 字段
+    // 定义 getHeaders 函数，返回 headers 对象，包括用户信息的 userToken 字段（因为SSR无法读取本地数据，所以就没有在请求头中加入用户的token了）
     const getHeaders = () => {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        // const user = JSON.parse(localStorage.getItem("user") || "{}");
         return {
             ...headers,
-            userToken: user?._id,
+            // userToken: user?._id,
         };
     };
+
     // 定义 FetchInstanceType 实例对象，包含各种请求方法的实现
     const instance: FetchInstanceType = {
         async get(url: string, init?: RequestInit) {
@@ -101,7 +102,13 @@ export const CreateFetchInstance = (
     return instance;
 };
 
-const request = CreateFetchInstance("");
+// 环境判断，服务器环境则添加服务器URL的前缀（服务器端渲染时，不能根据next.config.js里的内容进行url的重定向）
+let request = CreateFetchInstance("");
+
+if (typeof window === "undefined") {
+    const newBaseUrl = 'http://localhost:3000';;
+    request = CreateFetchInstance(newBaseUrl);
+}
 
 export default request;
 

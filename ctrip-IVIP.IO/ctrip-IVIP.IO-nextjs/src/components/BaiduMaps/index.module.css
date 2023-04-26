@@ -1,0 +1,8 @@
+.infoWindow {
+    background-color: aquamarine
+}
+
+.mapbox {
+    height: 1px;
+    background-color: blue !important;
+}

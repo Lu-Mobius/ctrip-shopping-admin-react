@@ -1,49 +1,24 @@
-import { Button, Checkbox, Col, DatePicker, Form, Row, TimePicker } from "antd"
-import { RangeValue } from 'rc-picker/lib/interface';
+import { Button, Checkbox } from "antd"
 import { useRouter } from "next/router"
-import StarBox from '@/components/Starbox';
-import type { RangePickerProps } from 'antd/es/date-picker';
 import styles from './index.module.css';
-import { DatePickerModule } from "@/components/DatePicker";
-import { SetStateAction, useEffect, useState } from "react";
-import dayjs, { Dayjs } from 'dayjs';
-import { Select } from 'antd';
-import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Input, Tooltip } from 'antd';
-import moment from 'moment';
 import 'moment/locale/zh-cn';
-import Link from "next/link";
-import { payQuery, } from "@/api/hotel";
-import { PayQueryType } from "@/type/hotel";
 import request from "@/utils/request";
-
-
-
+import { useDebouncedCallback } from "@/utils/debounce";
 
 export default function Home() {
   const router = useRouter()
-  function handleBackClick() {
-    router.back();
-  }
-
-  function formatDateString(dateString: string | undefined | null): string {
-    if (!dateString) {
-      return '';
-    }
-    const dateParts = dateString.split('-');
-    const formattedDate = `${dateParts[0]}年${parseInt(dateParts[1], 10)}月${parseInt(dateParts[2], 10)}日`;
-    return formattedDate;
-  }
 
   const { userId = '', orderId = '', hotel_name = '', room_name = '', location = '', price = 0,
     DateRange = [], dateRangeDiff = 0, roomCount = 0, } = router.query
   const totalprice = Number(price) * Number(dateRangeDiff) * Number(roomCount)
-
+  // 返回上一步
+  function handleBackClick() {
+    router.back();
+  }
+  // 支付
   async function handlepayClick() {
     try {
-      // 调用接口
       const payResult = await request.put(`/api/order/pay?userId=${userId}&orderId=${orderId}`);
-      console.log("🚀 ~ file: index.tsx:48 ~ handlepayClick ~ payResult:", payResult)
       // 判断支付结果是否成功
       if (payResult.success) {
         // 成功则跳转至其他页面
@@ -55,7 +30,7 @@ export default function Home() {
       console.error(error);
     }
   }
-
+  const debouncedHandlePayClick = useDebouncedCallback(handlepayClick, 300);
 
   return (
     <div className={styles.body}>
@@ -87,10 +62,7 @@ export default function Home() {
       <div className={styles.paybox}>
         <Checkbox checked={true} className={styles.pay}>使用余额支付</Checkbox>
       </div>
-      <Button onClick={handlepayClick} className={styles.paybottom}>使用余额支付¥{totalprice}</Button>
-      <Button type="link" onClick={handleBackClick} className={styles.backbottom}>{`< 更改我的选择`}</Button>
-
+      <Button onClick={debouncedHandlePayClick} className={styles.paybottom}>使用余额支付¥{totalprice}</Button>
     </div>
-
   )
 }

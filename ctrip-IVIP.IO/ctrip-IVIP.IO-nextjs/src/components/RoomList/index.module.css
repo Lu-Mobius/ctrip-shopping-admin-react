@@ -1,0 +1,115 @@
+.roomitem {
+    min-width: 90%;
+    display: flex;
+    flex-direction: row;
+}
+
+.roomleft {
+    min-width: 30%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #dadfe6
+}
+
+.room_img img {
+    padding-right: 20%;
+    max-width: 300px;
+}
+
+.roomright {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+}
+
+.roomright>div {
+    border-top: 1px solid #dadfe6;
+}
+
+.roomright div:first-child {
+    border-top: 0;
+}
+
+.roomdetail {
+    min-width: 100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
+}
+
+.room_people_num {
+    padding-top: 3px;
+    width: 130px;
+    display: flex;
+    flex-direction: row;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.breakfast {
+    width: 200px;
+    color: #06aebd;
+    text-decoration: underline;
+}
+
+.cancellation {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+
+}
+
+.Blink {
+    width: 36px;
+    padding: 1px 4px;
+    background: #fff0e5;
+    border-radius: 2px;
+    color: #ff6f00;
+    line-height: 17px;
+    cursor: pointer;
+    font: 12px/1.5;
+}
+
+.pricedetail1 {
+    height: 30px;
+    line-height: 38px;
+    color: #0086f6;
+    font-size: 8px;
+    display: inline-block;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px dotted;
+}
+
+.pricedetail2 {
+    height: 30px;
+    line-height: 28px;
+    color: #0086f6;
+    font-size: 24px;
+    display: inline-block;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px dotted;
+}
+
+.book {
+    width: 100px;
+
+}
+
+.book_bottom {
+    font-size: 16px;
+    line-height: 38px;
+    background-color: #ff9500;
+    text-align: center;
+    height: 38px;
+    border-radius: 2px;
+    font-weight: 700;
+    padding: 0 24px;
+    box-sizing: border-box;
+    min-width: 75px;
+}

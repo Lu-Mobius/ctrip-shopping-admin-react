@@ -36,6 +36,7 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.05);
+  opacity: 0.95;
 }
 
 .label {
@@ -59,9 +60,9 @@
   position: relative;
   top: -12px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 600;
   line-height: 10px;
   margin: 20px;
   color: #007fe9;
-  font-family: '微软雅黑'
+  font-family: '黑体'
 }

@@ -27,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
           type="text/javascript"
           src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=dRIBHGCAx2QxmSLG8c56U5rOng70Fiju"
         ></script>
+        <meta lang="zh-CN" />
       </Head>
       {load ? (
         // <ConfigProvider> 组件，提供全局配置。其中 locale 属性被设置为中文语言包。

@@ -2,21 +2,19 @@ import { useEffect, useState } from "react";
 import { UserType } from "@/type/user";
 import { message } from "antd";
 import Router, { useRouter } from "next/router";
-
-export const useCurrentUser = (): UserType | null => {
+// 获取当前登录用户的信息，如果没有用户信息，则重定向到登陆界面
+export const useCurrentUser = () => {
     const router = useRouter();
-    const [user, setUser] = useState<UserType | null>(null);
 
-    useEffect(() => {
-        const userString = localStorage.getItem("user");
-        if (userString) {
-            const user = JSON.parse(userString);
-            setUser(user);
-        } else {
-            router.push("/login");
-            message.error("请登录后重试");
-        }
-    }, [router]);
+    const userString = localStorage.getItem("user");
+    if (userString) {
+        const user = JSON.parse(userString);
+        return user;
+    } else {
+        router.push("/login");
+        message.error("请登录后重试");
+        return
+    }
 
-    return user;
+
 };

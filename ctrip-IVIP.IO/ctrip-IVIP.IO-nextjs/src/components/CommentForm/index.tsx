@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Modal, Form, Input, Button, message } from 'antd';
+import { Modal, Form, Input, message } from 'antd';
 import request from '@/utils/request';
 import { useRouter } from 'next/router';
+import { useDebouncedCallback } from '@/utils/debounce';
 
 type CommentFormProps = {
     open: boolean;
@@ -23,11 +23,11 @@ function CommentForm(props: CommentFormProps) {
         submitComment(values, props.item); // 提交表单数据和item参数
         props.onCancel();
     };
+    const debouncedonFinish = useDebouncedCallback(onFinish, 500);
 
     const submitComment = (values: any, item: any) => {
         console.log("🚀 ~ file: index.tsx:9 ~ item:", item)
         const requestBody = {
-
             ...values, // 将表单数据展开到请求体中
             userId: item.userId, // 添加item参数到请求体中
             hotelId: item.hotelId,
@@ -60,7 +60,7 @@ function CommentForm(props: CommentFormProps) {
             onCancel={props.onCancel}
             onOk={handleOk}
         >
-            <Form form={form} onFinish={onFinish}>
+            <Form form={form} onFinish={debouncedonFinish}>
                 <Form.Item
                     label="评论内容"
                     name="comment"

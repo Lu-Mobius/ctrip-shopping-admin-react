@@ -1,33 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, FormInstance, Input, Space, Table, Tag, message, theme } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
+import { Button, message, } from 'antd';
 import request from '@/utils/request';
 import styles from "./index.module.css";
-import Link from 'next/link';
 import { SearchOutlined } from '@ant-design/icons';
-import type { DrawerProps, RadioChangeEvent } from 'antd';
-import { Drawer, Radio } from 'antd';
+import { Drawer, } from 'antd';
 import { Modal } from 'antd';
-import { useForm } from 'antd/lib/form/Form';
-
 import { PlusOutlined } from '@ant-design/icons';
 import RegistrationForm from '@/components/RegisterForm';
 import { RegistrationFormValues, UserListDataType } from '@/type/user';
-import { clear } from 'console';
+import UserManagementList from '@/components/UserManagementList';
+import { useDebouncedCallback } from '@/utils/debounce';
 
-export default function Home() {
-    const [data, setData] = useState<UserListDataType[]>([]);
-    const [inputValue, setInputValue] = useState("");
-    const [shouldResetForm, setShouldResetForm] = useState(false);
+// 从getServerSideProps获取用户数据列表ssr_data
+export default function Home({ ssr_data }: { ssr_data: UserListDataType[]; }) {
+
+    // 定义了一些状态
+    const [data, setData] = useState<Array<UserListDataType>>(ssr_data);
     const [clear, setClear] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const res = await request.get('/api/users');
-            setData(res.data);
-        };
-        fetchData();
-    }, []);
+    const { confirm } = Modal;
 
     const handleDelete = async (userId: string) => {
         try {
@@ -39,15 +31,12 @@ export default function Home() {
             console.log('Delete failed', error);
             message.success('删除失败，请重试')
         }
-
     }
 
-    const [open, setOpen] = useState(false);
     const showDrawer = () => {
         setOpen(true);
     };
 
-    const { confirm } = Modal;
     const onClose = () => {
         confirm({
             title: '您确定要取消创建用户吗？',
@@ -62,8 +51,6 @@ export default function Home() {
 
     // 用户注册的表单提交
     const onFinish = async (values: RegistrationFormValues) => {
-
-        console.log('Received values of form: ', values);
         try {
             const response = await request.post("/api/users", values);
             if (response.success) {
@@ -84,94 +71,8 @@ export default function Home() {
         }
     }
 
-    const columns: ColumnsType<UserListDataType> = [
-        {
-            title: '用户ID',
-            dataIndex: '_id',
-            key: '_id',
-            render: (text) => <a>{text}</a>,
-        },
-        {
-            title: '用户名',
-            dataIndex: 'name',
-            key: 'name',
-            onFilter: (value, record) =>
-                record.name.includes(value as string) || record.email.includes(value as string),
-            filterDropdown: ({ setSelectedKeys, confirm, clearFilters }) => (
-                <div style={{ padding: 20 }}>
-                    <div >
-                        <Input
-                            placeholder="请输入想要查找的用户"
-                            value={inputValue}
-                            onChange={(e) => {
-                                setInputValue(e.target.value)
-                                setSelectedKeys(e.target.value ? [e.target.value] : [])
-                            }
-                            }
-                            onPressEnter={() => confirm()}
-                            style={{ width: 188, marginBottom: 8, display: 'block' }}
-                        />
-                        <Space>
-                            <Button
-                                type="primary"
-                                onClick={() => confirm()}
-                                size="small"
-                                style={{ width: 90 }}
-                            >
-                                搜索
-                            </Button>
-                            <Button onClick={clearFilters = () => {
-                                setSelectedKeys([]);
-                                setInputValue("");
-                                confirm();
-                            }} size="small" style={{ width: 90 }}>
-                                清空
-                            </Button>
-                        </Space>
-                    </div>
-                </div >
-            ),
-            filterIcon: (filtered: boolean) => (
-                <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
-            ),
-        },
-        {
-            title: '注册邮箱',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: '注册手机号',
-            key: 'phoneNum',
-            dataIndex: 'phoneNum',
-        },
-        {
-            title: '权限',
-            key: 'role',
-            dataIndex: 'role',
-            sorter: (a, b) => a.role.localeCompare(b.role),
-            render: (text, record) => (
-                <div className={record.role == 'admin' ? styles.admin_row : styles.user_row}>
-                    {text}
-                </div>
-            )
-        },
-        {
-            title: '账户余额',
-            key: 'balance',
-            dataIndex: 'balance',
-            sorter: (a, b) => a.balance - b.balance
-        },
-        {
-            title: '操作',
-            key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <Button danger type="default" onClick={() => handleDelete(record._id)}>删除</Button>
-                </Space >
-            ),
-        },
-    ];
+    const debouncedonFinish = useDebouncedCallback(onFinish, 500);
+
 
     return (
         <div className={styles.table} >
@@ -189,7 +90,7 @@ export default function Home() {
                         <Button type="primary" ghost onClick={onClose} style={{ marginRight: 20 }}>取消创建</Button>
                     }
                 >
-                    <RegistrationForm clear={clear} onFinish={onFinish} />
+                    <RegistrationForm clear={clear} onFinish={debouncedonFinish} />
                 </Drawer>
                 <div className={styles.tabletitle} >用户管理</div>
                 <div className={styles.addbutton}>
@@ -198,7 +99,14 @@ export default function Home() {
                     </Button>
                 </div>
             </div>
-            <Table columns={columns} dataSource={data} />
+            <UserManagementList data={data} handleDelete={handleDelete} />
         </div >
     )
+}
+
+
+export async function getServerSideProps() {
+    const res = await request.get('/api/users');
+    const ssr_data = res.data;
+    return { props: { ssr_data } };
 }

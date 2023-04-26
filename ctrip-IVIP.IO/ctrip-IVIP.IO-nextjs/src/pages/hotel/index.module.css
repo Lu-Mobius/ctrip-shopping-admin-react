@@ -9,17 +9,24 @@
 }
 
 .tabletitle {
+    position: absolute;
+    top: 120px;
+    left: 280px;
     font-size: 30px;
     padding-bottom: 40px;
-    font-weight: 600;
-    color: #2577E3;
+    font-weight: 800;
+    color: #d65151;
+    font-family: '楷体';
     white-space: nowrap;
+
 }
 
 .searchform {
-    background-color: #eee;
+    background-color: rgba(37, 119, 227, 0.05);
     white-space: nowrap;
     margin-left: 15.5%;
+    margin-bottom: 20px;
+    margin-top: -43px;
 }
 
 .buttonsearch {

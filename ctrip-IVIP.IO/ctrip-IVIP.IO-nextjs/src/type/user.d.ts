@@ -10,7 +10,6 @@ export interface UserType {
     status: USER_STATUS;
     sex: USER_SEX;
     money: string;
-
 }
 
 export interface UserLoginType {

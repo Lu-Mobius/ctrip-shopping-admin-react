@@ -18,8 +18,9 @@ export default function Home() {
   const router = useRouter();
   //activeTab用于切换登录/注册选项 默认激活登录标签页
   const [activeTab, setActiveTab] = useState('login');
-  const [clear,setClear]=useState(false);
-  // 处理登录表单提交事件
+  const [clear, setClear] = useState(false);
+
+  // 处理登录表单提交事件，用户信息会存储到localStorage里
   const onFinish = async (values: UserLoginType) => {
     try {
       const res = await request.post("/api/login", values);
@@ -63,7 +64,6 @@ export default function Home() {
   // 处理Tab栏切换
   const handleTabChange = (key: SetStateAction<string>) => {
     setActiveTab(key);
-    
   };
 
   // Tabs 组件中的 items 数组的类型，分别包含两个Form组件LoginForm和RegistrationForm
@@ -108,17 +108,11 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>携程购物管理平台</title>
-        <meta name="description" content="携程购物管理平台" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="favicon.ico" />
-      </Head>
       <div className={styles.body}>
         <div className={styles.background}>
           <BackgroundVideo />
         </div>
-        <div className={styles.loginbox}>
+        <div className={styles.loginbox} >
           <div className={styles.form}>
             <div className={styles.formhead}>
               <div className={styles.formimg}>
@@ -126,7 +120,6 @@ export default function Home() {
               </div>
               <div className={styles.formtitle}>内部酒店预订管理平台</div>
             </div>
-
             <Tabs
               activeKey={activeTab}
               onChange={handleTabChange}
