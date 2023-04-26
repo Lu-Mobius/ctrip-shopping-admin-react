@@ -24,9 +24,9 @@ router.post('/', async function(req, res, next) {
 /*  管理员可通过查看所有用户*/
 router.get('/', async function(req, res) {
   const { name, email } = req.query;
-  // const current = parseInt(req.query.page) || 1
-  // const pageSize = parseInt(req.query.pageSize) || 10
-  try {
+  const session = req.session
+  if (session.user && session.user.role === 'admin'){
+    try {
     const allData = await User.find({
       ...(name && { name }),
       ...(email && { email }),
@@ -45,6 +45,10 @@ router.get('/', async function(req, res) {
     } catch (error) {
       return res.status(500).json({ message: "服务端异常,无法获取到用户数据" });
     }
+  }
+  // const current = parseInt(req.query.page) || 1
+  // const pageSize = parseInt(req.query.pageSize) || 10
+  
   });
   /* 管理员和用户获取详细的用户信息 */
   router.get("/:uid", async (req, res) => {
@@ -59,12 +63,16 @@ router.get('/', async function(req, res) {
   });
   /*管理员删除用户信息 */ 
   router.delete("/:uid", async (req, res) => {
-    try {
+    const session = req.session
+    if (session.user && session.user.role === 'admin'){
+      try {
       await User.deleteOne({ _id: req.params.uid });
       return res.status(200).json({ success: true });
     } catch (error) {
       return res.status(500).json({ message: "用户不存在，无法删除" });
     }
+    }
+    
   });
 
 module.exports = router;

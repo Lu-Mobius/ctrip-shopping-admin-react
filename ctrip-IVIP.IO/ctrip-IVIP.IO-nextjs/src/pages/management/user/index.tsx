@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, message, } from 'antd';
 import request from '@/utils/request';
 import styles from "./index.module.css";
@@ -12,15 +12,21 @@ import UserManagementList from '@/components/UserManagementList';
 import { useDebouncedCallback } from '@/utils/debounce';
 
 // 从getServerSideProps获取用户数据列表ssr_data
-export default function Home({ ssr_data }: { ssr_data: UserListDataType[]; }) {
+export default function Home() {
 
     // 定义了一些状态
-    const [data, setData] = useState<Array<UserListDataType>>(ssr_data);
+    const [data, setData] = useState<UserListDataType[]>([]);
     const [clear, setClear] = useState(false);
     const [open, setOpen] = useState(false);
-
     const { confirm } = Modal;
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await request.get('/api/users');
+            setData(res.data);
+        };
+        fetchData();
+    }, []);
     const handleDelete = async (userId: string) => {
         try {
             await request.delete(`/api/users/${userId}`);
@@ -104,9 +110,3 @@ export default function Home({ ssr_data }: { ssr_data: UserListDataType[]; }) {
     )
 }
 
-
-export async function getServerSideProps() {
-    const res = await request.get('/api/users');
-    const ssr_data = res.data;
-    return { props: { ssr_data } };
-}

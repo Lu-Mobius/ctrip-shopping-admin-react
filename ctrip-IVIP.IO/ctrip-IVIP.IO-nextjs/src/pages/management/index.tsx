@@ -9,9 +9,9 @@ import { SegmentedValue } from "antd/es/segmented";
 import qs from "qs";
 import OrderListManagement from "@/components/OrderListManagement";
 
-export default function Home({ ssr_data }: { ssr_data: Array<object> }) {
+export default function Home() {
 
-    const [data, setData] = useState(ssr_data)
+    const [data, setData] = useState<any>([])
     const [status, setStatus] = useState<number>(100);
     const [form] = Form.useForm()
 
@@ -131,11 +131,3 @@ export default function Home({ ssr_data }: { ssr_data: Array<object> }) {
     )
 }
 
-export async function getServerSideProps() {
-    const res = await request.get('/api/management');
-    console.log("🚀 ~ file: index.tsx:136 ~ getServerSideProps ~ res:", res)
-    const ssr_data = res.data;
-    return {
-        props: { ssr_data },
-    };
-};

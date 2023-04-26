@@ -6,6 +6,7 @@ let { Hotel, User, Order} = require('../model');
 //   用户获取全部订单信息
 router.get('/', async function(req, res){
     const { userId, status } = req.query;
+    // 管理员查询自己的订单就需要在请求中带上useId
     const current = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.pageSize) || 10
     // const total = await Order.countDocuments({
@@ -13,10 +14,14 @@ router.get('/', async function(req, res){
     //   ...(status && { status }),
     // });
     const userOn = await User.findById(userId)
-    let newUser = 1
+    const session = req.session
+    let newUser = userId
+    if (session.user && session.user.role === 'user'){
+      newUser = session.user._id
+    }
     let balance = userOn.balance
     const data = await Order.find({
-        ...(newUser && { userId }),
+        ...(newUser && { userId: newUser}),
         ...(status && { status }),
       })
         .sort({ updatedAt: -1 })
@@ -35,8 +40,12 @@ router.put('/recharge/', async function(req, res) {
   const {userId } = req.query
   // console.log("🚀 ~ file: indent.js:41 ~ router.put ~ useId:", userId)
   const amount = parseInt(req.query.amount);
+  const session = req.session
+  console.log("🚀 ~ file: indent.js:44 ~ router.put ~ session:", session)
   const userAccount = await User.findOne({ _id: userId });
-  if (userAccount){
+  const newUser = session.user._id
+  if (userAccount && newUser == userId ){//&&String(session.user._id) === userId  
+    console.log("🚀 ~ file: indent.js:46 ~ router.put ~ id:", session.user._id)
     if (amount > 0){
           userAccount.balance += amount;
           // console.log("🚀 ~ file: indent.js:46 ~ router.put ~ userAccount.balance:", userAccount.balance)
@@ -47,7 +56,7 @@ router.put('/recharge/', async function(req, res) {
           res.status(500).json({ message:'输入金额有误' });
     }
   } else {
-      res.status(500).json({ message: '该用户不存在' });
+      res.status(500).json({ message: '该用户状态出错 '});
   }
 });
   
