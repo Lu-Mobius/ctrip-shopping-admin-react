@@ -17,11 +17,17 @@ interface Props {
 const Home: React.FC<Props> = ({ data, status, setData, setStatus, setbalance, userId }) => {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    console.log("🚀 ~ file: index.tsx:20 ~ isModalOpen:", isModalOpen)
 
     const handleStatusChange = (status: number) => {
         if (setStatus) {
             setStatus(status);
         }
+    };
+    const onCancel = () => {
+        console.log('111')
+        setIsModalOpen(false)
+        console.log('111')
     };
 
     const handlePayClick = async (item: any) => {
@@ -160,11 +166,9 @@ const Home: React.FC<Props> = ({ data, status, setData, setStatus, setbalance, u
                                         <Button danger type="dashed" style={{ display: item.status == '0' || item.status == '1' ? 'inline-block' : 'none', marginLeft: 20 }} onClick={() => debouncedCancelOrder(item)}>取消订单</Button>
                                         <Button type="primary" className={styles.comment_button} style={{ display: item.status == '3' ? 'inline-block' : 'none', marginLeft: 20, marginRight: 8, color: 'white' }} onClick={() => {
                                             setIsModalOpen(true)
-                                        }} >
-                                            <CommentForm open={isModalOpen} onCancel={() => {
-                                                setIsModalOpen(false)
-                                            }} item={item} />
-                                            去评论</Button>
+                                        }} > 去评论</Button>
+                                        <CommentForm open={isModalOpen} onCancel={onCancel} item={item} />
+
                                     </Space>
                                 </div>
                             </div>
